@@ -1,2 +1,4 @@
 #!/usr/bin/python3
-import this
+with open("zen.txt", "r") as file:
+    zen_of_python = file.read().strip()
+print(zen_of_python)
