@@ -1,50 +1,45 @@
 #include "lists.h"
-
 /**
- * delete_dnodeint_at_index - deletes the node at index of a dlistint_t list.
- * @head: pointer to the list.
- * @index: position of the node to delete.
- * Return: 1 if it succeeded, -1 if it failed.
- **/
+ * delete_dnodeint_at_index - Delete node at nth
+ * @head: Pointer to direction of the head
+ * @index: The position in de ll
+ * Return: 1 if it succeeded or -1 if it failed
+ */
 int delete_dnodeint_at_index(dlistint_t **head, unsigned int index)
 {
-	dlistint_t *aux_node = *head;
-	dlistint_t *node_to_delete = *head;
-	unsigned int idx;
-	unsigned int cont = 0;
+	dlistint_t *p1, *res_mem = *head;
+	unsigned int counter = 0;
 
-	/* border case for empty list */
-	if (!(*head))
+	if (head == NULL || *head == NULL)
 		return (-1);
 
-	/* border case for delete at the beginning */
 	if (index == 0)
 	{
-		*head = node_to_delete->next;
-		free(node_to_delete);
-		if (*head)
-			(*head)->prev = NULL;
+		*head = res_mem->next;
+		if (res_mem->next == NULL)
+			return (-1);
+		res_mem->next->prev = NULL;
+		free(res_mem);
 		return (1);
 	}
 
-	/* search of position to delete */
-	idx = index - 1;
-	while (aux_node && cont != idx)
+	while (counter < index)
 	{
-		cont++;
-		aux_node = aux_node->next;
+		if (res_mem->next == NULL)
+			return (-1);
+		res_mem = res_mem->next;
+		counter++;
 	}
-
-	/* general case */
-	if (cont == idx && aux_node)
+	res_mem->prev->next = res_mem->next;
+	if (res_mem->next)
+		res_mem->next->prev = res_mem->prev;
+	if (res_mem->next == NULL)
 	{
-		node_to_delete = aux_node->next;
-		if (node_to_delete->next)
-		node_to_delete->next->prev = aux_node;
-		aux_node->next = node_to_delete->next;
-		free(node_to_delete);
+		p1 = res_mem->prev;
+		p1->next = NULL;
+		free(res_mem);
 		return (1);
 	}
-
-	return (-1);
+	free(res_mem);
+	return (1);
 }
